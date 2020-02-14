@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:text="是否删除此项？"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#000"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="删除后即代表将此项从数据库中移除，若需要可再次手动添加."
+        android:paddingBottom="32dp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_delete_button"
+            android:clickable="true"
+            android:drawablePadding="16dp"
+            android:gravity="center_horizontal"
+            android:padding="16dp"
+            android:text="删除"
+            android:textColor="#fff"
+            android:textSize="14sp"
+            android:onClick="delete"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_cancel_button"
+            android:clickable="true"
+            android:drawablePadding="16dp"
+            android:gravity="center_horizontal"
+            android:padding="16dp"
+            android:text="取消"
+            android:textColor="#fff"
+            android:textSize="14sp"
+            android:onClick="cancelDialog"/>
+    </LinearLayout>
+
+</LinearLayout>
