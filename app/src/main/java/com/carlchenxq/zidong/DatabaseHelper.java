@@ -9,9 +9,6 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    //public static final String DATABASE_NAME = "food.db";
-    //public static final int VERSION_CODE = 1;
-    //public static final String TABLE_NAME = "menu";
     public static final String TAG = "DatabaseHelper";
 
     public DatabaseHelper(@Nullable Context context) {
@@ -30,5 +27,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //升级数据库的回调
         Log.d(TAG, "升级数据库...");
+        switch(newVersion){
+            case 2: {
+                String sql = "create table drink(name varchar(100),loc varchar(100),primary key(name,loc))";
+                db.execSQL(sql);
+                sql = "insert into drink values('test_name','test_loc')";
+                db.execSQL(sql);
+                break;
+            }
+            default: break;
+        }
     }
 }

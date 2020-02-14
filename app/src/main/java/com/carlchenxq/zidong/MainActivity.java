@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,9 +30,29 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    /**
+     * global varies
+     */
+
+    //init arrayList to save the information of the dishes
     private ArrayList<Menu> menuInfo = new ArrayList<>();
-    int flag;
-    public static Dialog bottomDialog = null;
+    private ArrayList<Drink> drinkInfo = new ArrayList<>();
+    //the flags of current random item and the precious random item
+    private int flag;
+    private int preFlag = 0;
+    private int drinkOrMenuFlag = 0;  //0.menu 1.drink
+    private int cateFlag = 0; //0.menu 1.drink
+    //the global Views
+    private static Dialog bottomDialog = null;
+    private EditText edit_name = null;
+    private EditText edit_loc = null;
+    private TextView nameTextView = null;
+    private TextView locTextView = null;
+    private TextView hintTextView = null;
+    private TextView cateTextView = null;
+    //private Button menuBtn = null;
+    //private Button drinkBtn = null;
 
 
     @Override
@@ -59,15 +80,26 @@ public class MainActivity extends AppCompatActivity {
         DatabaseHelper helper = new DatabaseHelper(this);
         SQLiteDatabase db = helper.getWritableDatabase();
 
-        Cursor cursor = db.query("menu", null, null, null, null, null, null);
-        while (cursor.moveToNext()) {
+        Cursor cursor1 = db.query("menu", null, null, null, null, null, null);
+        while (cursor1.moveToNext()) {
             //String _id = cursor.getString(cursor.getColumnIndex("_id"));
-            String tempName = cursor.getString(cursor.getColumnIndex("name"));
-            String tempLoc = cursor.getString(cursor.getColumnIndex("loc"));
+            String tempName = cursor1.getString(cursor1.getColumnIndex("name"));
+            String tempLoc = cursor1.getString(cursor1.getColumnIndex("loc"));
             Menu tempMenu = new Menu();
             tempMenu.setName(tempName);
             tempMenu.setLoc(tempLoc);
             menuInfo.add(tempMenu);
+        }
+
+        Cursor cursor2 = db.query("drink", null, null, null, null, null, null);
+        while (cursor2.moveToNext()) {
+            //String _id = cursor.getString(cursor.getColumnIndex("_id"));
+            String tempName = cursor2.getString(cursor2.getColumnIndex("name"));
+            String tempLoc = cursor2.getString(cursor2.getColumnIndex("loc"));
+            Drink tempDrink = new Drink();
+            tempDrink.setName(tempName);
+            tempDrink.setLoc(tempLoc);
+            drinkInfo.add(tempDrink);
         }
     }
 
@@ -76,8 +108,9 @@ public class MainActivity extends AppCompatActivity {
      */
     public void add(View view) {
         //初始化两个EditTExt对象
-        EditText edit_name = (EditText) findViewById(R.id.edit_name);
-        EditText edit_loc = (EditText) findViewById(R.id.edit_loc);
+        edit_name = (EditText) findViewById(R.id.edit_name);
+        edit_loc = (EditText) findViewById(R.id.edit_loc);
+        final Toast sToast = Toast.makeText(MainActivity.this, "添加成功，去看看吧！:)", Toast.LENGTH_LONG);
 
         if (edit_name.getText().length() == 0 || edit_loc.getText().length() == 0) {
 
@@ -94,27 +127,46 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        final Toast sToast = Toast.makeText(MainActivity.this, "添加成功，去看看吧！:)", Toast.LENGTH_LONG);
+
         //获取EditText控件中的值并存储到String对象中
         String tempName = edit_name.getText().toString().trim();
         String tempLoc = edit_loc.getText().toString().trim();
 
-        //创建一个中间Menu对象，用来暂存获取到的值
-        Menu tempMenu = new Menu();
-        tempMenu.setName(tempName);
-        tempMenu.setLoc(tempLoc);
+        if(cateFlag == 0) {
+            //创建一个中间Menu对象，用来暂存获取到的值
+            Menu tempMenu = new Menu();
+            tempMenu.setName(tempName);
+            tempMenu.setLoc(tempLoc);
 
-        //将暂存的Menu对象添加到ArrayList中
-        menuInfo.add(tempMenu);
+            //将暂存的Menu对象添加到ArrayList中
+            menuInfo.add(tempMenu);
 
-        //将新添加的项写入数据库
-        DatabaseHelper helper = new DatabaseHelper(this);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("name", tempMenu.getName());
-        values.put("loc", tempMenu.getLoc());
-        db.insert("menu", null, values);
+            //将新添加的项写入数据库
+            DatabaseHelper helper = new DatabaseHelper(this);
+            SQLiteDatabase db = helper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("name", tempMenu.getName());
+            values.put("loc", tempMenu.getLoc());
+            db.insert("menu", null, values);
+        }
 
+        if(cateFlag == 1) {
+            //创建一个中间Drink对象，用来暂存获取到的值
+            Drink tempDrink = new Drink();
+            tempDrink.setName(tempName);
+            tempDrink.setLoc(tempLoc);
+
+            //将暂存的Menu对象添加到ArrayList中
+            drinkInfo.add(tempDrink);
+
+            //将新添加的项写入数据库
+            DatabaseHelper helper = new DatabaseHelper(this);
+            SQLiteDatabase db = helper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("name", tempDrink.getName());
+            values.put("loc", tempDrink.getLoc());
+            db.insert("drink", null, values);
+        }
         sToast.show();
         new Timer().schedule(new TimerTask() {
             @Override
@@ -135,37 +187,60 @@ public class MainActivity extends AppCompatActivity {
      */
     public void choose(View view) {
 
-        if (menuInfo.size() == 0) {
-
-            final Toast fToast = Toast.makeText(MainActivity.this, "啥也没有，左转添加 :(", Toast.LENGTH_SHORT);
-            fToast.show();
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    fToast.cancel();
-                }
-            }, 1000);
-            return;
-
-        }
-
-        int arrayListSize = menuInfo.size();
-        Random random = new Random();
-        TextView nameTextView = (TextView) findViewById(R.id.text_dashboard_name);
-        TextView locTextView = (TextView) findViewById(R.id.text_dashboard_loc);
-        TextView hintTextView = (TextView) findViewById(R.id.test_text_view);
+        nameTextView = (TextView) findViewById(R.id.text_dashboard_name);
+        locTextView = (TextView) findViewById(R.id.text_dashboard_loc);
+        hintTextView = (TextView) findViewById(R.id.test_text_view);
         final Toast suToast = Toast.makeText(MainActivity.this, "选完了，就是这么快 :D", Toast.LENGTH_LONG);
+        //menuBtn = (Button) findViewById(R.id.button_start_random);
+        //drinkBtn = (Button) findViewById(R.id.button_start_random_drink);
+        int pressedBtn = view.getId();
+        int arrayListSize = 0;
 
-        //quantityTextView.setText("" + number);
+        if (pressedBtn == R.id.button_start_random) {
+            arrayListSize = menuInfo.size();
+            if (arrayListSize == 0) {
 
-        for (int i = 0; i < 100; i++) {
-            flag = random.nextInt(arrayListSize);
+                final Toast fToast = Toast.makeText(MainActivity.this, "啥也没有，左转添加 :(", Toast.LENGTH_SHORT);
+                fToast.show();
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        fToast.cancel();
+                    }
+                }, 1000);
+                return;
+
+            }
+            random(arrayListSize);
             nameTextView.setText(menuInfo.get(flag).getName());
             locTextView.setText(menuInfo.get(flag).getLoc());
-
-            //set a hint
-            hintTextView.setText("不喜欢这道菜？");
+            drinkOrMenuFlag = 0;
         }
+
+        if (pressedBtn == R.id.button_start_random_drink) {
+            arrayListSize = drinkInfo.size();
+            if (arrayListSize == 0) {
+
+                final Toast fToast = Toast.makeText(MainActivity.this, "啥也没有，左转添加 :(", Toast.LENGTH_SHORT);
+                fToast.show();
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        fToast.cancel();
+                    }
+                }, 1000);
+                return;
+
+            }
+            random(arrayListSize);
+            nameTextView.setText(drinkInfo.get(flag).getName());
+            locTextView.setText(drinkInfo.get(flag).getLoc());
+            drinkOrMenuFlag = 1;
+        }
+
+        //set a hint
+        hintTextView.setText("不喜欢？:(");
+        preFlag = flag;
 
         suToast.show();
         new Timer().schedule(new TimerTask() {
@@ -175,6 +250,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 1000);
 
+    }
+
+    /**
+     * method to random choose
+     */
+    public void random(int seed) {
+        Random random = new Random();
+        flag = random.nextInt(seed);
+        if (flag == preFlag && seed != 1) {
+            random(seed);
+        }
     }
 
 
@@ -195,6 +281,39 @@ public class MainActivity extends AppCompatActivity {
         bottomDialog.show();
     }
 
+    /**
+     * the method for category
+     * */
+    public void cateOnClick(View view) {
+        bottomDialog = new Dialog(this, R.style.BottomDialog);
+        View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_category, null);
+        bottomDialog.setContentView(contentView);
+        ViewGroup.LayoutParams layoutParams = contentView.getLayoutParams();
+        layoutParams.width = getResources().getDisplayMetrics().widthPixels;
+        contentView.setLayoutParams(layoutParams);
+        bottomDialog.getWindow().setGravity(Gravity.BOTTOM);
+        bottomDialog.getWindow().setWindowAnimations(R.style.BottomDialog_Animation);
+        bottomDialog.show();
+    }
+
+    /**
+     * method to set category
+     * */
+
+    public void setCate(View view) {
+        int pressedBtn = view.getId();
+        cateTextView = (TextView) findViewById(R.id.text_category);
+        if(pressedBtn == R.id.cate_menu) {
+            cateFlag = 0;
+            cateTextView.setText("吃的");
+            bottomDialog.cancel();
+        }
+        if(pressedBtn == R.id.cate_drink) {
+            cateFlag = 1;
+            cateTextView.setText("喝的");
+            bottomDialog.cancel();
+        }
+    }
 
     /**
      * the method to delete the selected item of the ArrayList
@@ -204,21 +323,32 @@ public class MainActivity extends AppCompatActivity {
         DatabaseHelper helper = new DatabaseHelper(this);
         SQLiteDatabase db = helper.getWritableDatabase();
 
-        String sql = "delete from menu where name='" + menuInfo.get(flag).getName() + "'";
-        menuInfo.remove(flag);
-        db.execSQL(sql);
+        if (drinkOrMenuFlag == 0) {
+            String sql = "delete from menu where name='" + menuInfo.get(flag).getName() + "'";
+            menuInfo.remove(flag);
+            db.execSQL(sql);
+        }
+
+        if (drinkOrMenuFlag == 1) {
+            String sql = "delete from drink where name='" + drinkInfo.get(flag).getName() + "'";
+            drinkInfo.remove(flag);
+            db.execSQL(sql);
+        }
+
+        nameTextView.setText("[已删除]");
+        locTextView.setText("[已删除]");
+        hintTextView.setText("");
         bottomDialog.cancel();
-        Toast.makeText(MainActivity.this, "删除成功，再也没有啦！:)", Toast.LENGTH_LONG).show();
+        //Toast.makeText(MainActivity.this, "删除成功，再也没有啦！:)", Toast.LENGTH_LONG).show();
 
     }
 
     /**
      * the method to cancel the dialog
-     * */
+     */
 
     public void cancelDialog(View view) {
         bottomDialog.cancel();
     }
-
 
 }

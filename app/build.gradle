@@ -8,7 +8,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 29
         versionCode 2
-        versionName "1.0.2Beta"
+        versionName "1.2.0Beta"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
