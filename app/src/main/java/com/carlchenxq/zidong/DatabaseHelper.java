@@ -21,6 +21,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d(TAG, "创建数据库...");
         String sql = "create table menu(name varchar(100),loc varchar(100),primary key(name,loc))";
         db.execSQL(sql);
+        sql = "create table drink(name varchar(100),loc varchar(100),primary key(name,loc))";
+        db.execSQL(sql);
     }
 
     @Override
@@ -30,8 +32,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         switch(newVersion){
             case 2: {
                 String sql = "create table drink(name varchar(100),loc varchar(100),primary key(name,loc))";
-                db.execSQL(sql);
-                sql = "insert into drink values('test_name','test_loc')";
                 db.execSQL(sql);
                 break;
             }

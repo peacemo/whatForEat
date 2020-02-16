@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView locTextView = null;
     private TextView hintTextView = null;
     private TextView cateTextView = null;
+    private int easterEgg = 0;
     //private Button menuBtn = null;
     //private Button drinkBtn = null;
 
@@ -68,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+        //BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+        //bottomNavigationView.setItemTextAppearanceActive(R.style.bottom_selected_text);
+        //bottomNavigationView.setItemTextAppearanceInactive(R.style.bottom_normal_text);
 
         initDB();
     }
@@ -148,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
             values.put("name", tempMenu.getName());
             values.put("loc", tempMenu.getLoc());
             db.insert("menu", null, values);
+            cateFlag = 0;
         }
 
         if(cateFlag == 1) {
@@ -166,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
             values.put("name", tempDrink.getName());
             values.put("loc", tempDrink.getLoc());
             db.insert("drink", null, values);
+            cateFlag = 0;
+            cateTextView.setText("吃的");
         }
         sToast.show();
         new Timer().schedule(new TimerTask() {
@@ -178,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
         //最后清空输入框内容
         edit_name.setText("");
         edit_loc.setText("");
+
 
 
     }
@@ -349,6 +357,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void cancelDialog(View view) {
         bottomDialog.cancel();
+    }
+
+    public void onClickEasterEgg(View view) {
+        if(easterEgg < 10) {
+            easterEgg++;
+        }
+        else {
+            easterEgg = 0;
+            Toast.makeText(MainActivity.this, "突然出现！0x0", Toast.LENGTH_LONG).show();
+        }
     }
 
 }
