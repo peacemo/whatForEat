@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#222222</color>
+    <color name="colorPrimaryDark">#1c1a18</color>
+    <color name="colorAccent">#000000</color>
+
+    <color name="colorCard">#1c1a18</color>
+
+    <!--关于界面背景颜色-->
+    <color name="notiColor">#303030</color>
+    <color name="textColor">#bbb</color>
+
+    <!--输入框颜色-->
+    <color name="editBGColor">#111</color>
+
+    <!--底栏颜色-->
+    <color name="BGColor">#232323</color>
+</resources>

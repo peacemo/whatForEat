@@ -8,7 +8,7 @@
 
     <!-- 填充的颜色 -->
 
-    <solid android:color="#ffffff" />
+    <solid android:color="@color/colorCard" />
 
     <!-- 设置按钮的四个角为弧形 -->
 

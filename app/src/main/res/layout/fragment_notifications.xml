@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f8f9f9"
+    android:background="@color/notiColor"
     android:orientation="vertical">
 
     <LinearLayout
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="使用指南："
-            android:textColor="#000"
+            android:textColor="@color/textColor"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_vertical_margin"
             android:text="关于："
-            android:textColor="#000"
+            android:textColor="@color/textColor"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_vertical_margin"
             android:text="捐赠："
-            android:textColor="#000"
+            android:textColor="@color/textColor"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_vertical_margin"
             android:text="项目地址："
-            android:textColor="#000"
+            android:textColor="@color/textColor"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -85,7 +85,6 @@
             android:background="@drawable/shape_card"
             android:drawableLeft="@drawable/ic_link"
             android:text="https://github.com/peacemo/whatForEat"
-            android:textColor="#3478f5"
             android:textSize="16sp" />
 
         <TextView

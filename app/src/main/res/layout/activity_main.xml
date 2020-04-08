@@ -11,7 +11,7 @@
         android:layout_height="64dp"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
+        android:background="@color/BGColor"
         android:paddingBottom="8dp"
         app:itemBackground="@null"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -3,5 +3,10 @@
     <string name="title_home">添加</string>
     <string name="title_dashboard">冲</string>
     <string name="title_notifications">关于</string>
-    <string name="app_version">版本：1.4.2.7 Ultimate.</string>
+    <string name="app_version">版本：1.4.2.7 ULTIMATE.</string>
+
+    <!--以下是在添加页面出现的文字-->
+    <string name="home_add_food">菜名[示例：鸡公煲]</string>
+    <string name="home_add_loc">地址[示例：北京路46号]</string>
+    <string name="home_btn">加</string>
 </resources>
